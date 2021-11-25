@@ -1,3 +1,4 @@
+import { AppError } from "../../../../shared/errors/AppError";
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { CreateUserUseCase } from "./CreateUserUseCase";
@@ -15,7 +16,7 @@ describe('Create User Use Case', () => {
     const userFake: ICreateUserDTO = {
       name: 'any name',
       email: 'any_email@mail.com',
-      password: '1234'
+      password: 'any_password'
     }
 
     const user = await createUserUseCase.execute(userFake)
@@ -24,5 +25,22 @@ describe('Create User Use Case', () => {
     expect(user).toHaveProperty('password')
     expect(user).toHaveProperty('name', 'any name')
     expect(user).toHaveProperty('email', 'any_email@mail.com')
+  })
+  it('Should not be able to create a new user if email already exists', async () => {
+    expect(async () => {
+      const userFake1: ICreateUserDTO = {
+        name: 'any name',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      }
+      const userFake2: ICreateUserDTO = {
+        name: 'other name',
+        email: 'any_email@mail.com',
+        password: 'other_password'
+      }
+
+      await createUserUseCase.execute(userFake1)
+      await createUserUseCase.execute(userFake2)
+    }).rejects.toBeInstanceOf(AppError)
   })
 })
