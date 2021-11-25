@@ -3,5 +3,6 @@ export default {
   clearMocks: true,
   coverageProvider: 'v8',
   preset: 'ts-jest',
-  testMatch: ['**/*.spec.ts']
+  testMatch: ['**/*.spec.ts'],
+  setupFiles: ["<rootDir>./src/config/auth.ts"]
 }
