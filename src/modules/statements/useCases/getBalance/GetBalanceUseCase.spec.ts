@@ -24,13 +24,13 @@ describe("Get Balance Use Case", () => {
   });
 
   it("Should be able to get the user balance.", async () => {
-    const useFake: ICreateUserDTO = {
+    const userFake: ICreateUserDTO = {
       name: "any_name",
       email: "anyemail@mail.com",
       password: "any_password",
     };
 
-    const user = await createUserUseCase.execute(useFake)
+    const user = await createUserUseCase.execute(userFake)
     const user_id = user.id as string
 
     const balance = await getBalanceUseCase.execute({ user_id })
