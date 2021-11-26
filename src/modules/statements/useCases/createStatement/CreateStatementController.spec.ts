@@ -54,4 +54,21 @@ describe("CreateStatementController.", () => {
     expect(response.body).toHaveProperty("created_at");
     expect(response.body).toHaveProperty("updated_at");
   });
+
+  it("Ensure CreateStatementController not be able create deposit statement if not authenticate user", async () => {
+    const token = "invalid_token";
+
+    const deposit = {
+      description: "deposit in account",
+      amount: 100,
+    };
+
+    const response = await request(app)
+      .post("/api/v1/statements/deposit")
+      .send(deposit)
+      .set({ authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ message: "JWT invalid token!" });
+  });
 });
