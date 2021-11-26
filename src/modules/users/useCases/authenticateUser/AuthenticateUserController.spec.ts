@@ -6,7 +6,7 @@ import { ICreateUserDTO } from "../createUser/ICreateUserDTO";
 
 let connection: Connection;
 
-const userFake: ICreateUserDTO= {
+const userFake: ICreateUserDTO = {
   name: "any name",
   email: "any_email@mail.com",
   password: "any_password",
@@ -31,9 +31,18 @@ describe("AuthenticateUserController", () => {
       .post("/api/v1/sessions")
       .send({ email, password });
 
-    expect(response.body).toHaveProperty('token');
-    expect(response.body).toHaveProperty('user.id');
-    expect(response.body).toHaveProperty('user.name', "any name");
-    expect(response.body).toHaveProperty('user.email', "any_email@mail.com");
+    expect(response.body).toHaveProperty("token");
+    expect(response.body).toHaveProperty("user.id");
+    expect(response.body).toHaveProperty("user.name", "any name");
+    expect(response.body).toHaveProperty("user.email", "any_email@mail.com");
+  });
+
+  it("Should not be able authenticate an user with incorrect password", async () => {
+    const response = await request(app)
+      .post("/api/v1/sessions")
+      .send({ email, password: 'invalid_password' });
+
+    expect(response.status).toEqual(401)
+    expect(response.body).toEqual({"message": "Incorrect email or password"})
   });
 });
