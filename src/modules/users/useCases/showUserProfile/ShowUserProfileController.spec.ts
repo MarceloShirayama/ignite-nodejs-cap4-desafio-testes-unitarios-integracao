@@ -34,16 +34,28 @@ describe("ShowUserProfileController", () => {
 
   it("Should be able show user profile", async () => {
     const { token } = responseAuthenticate.body;
+
     const response = await request(app)
       .get("/api/v1/profile")
       .send()
       .set({ authorization: `Bearer ${token}` });
 
-    expect(response.status).toBe(200)
-    expect(response.body).toHaveProperty("id")
-    expect(response.body).toHaveProperty("name", "any name")
-    expect(response.body).toHaveProperty("email", "any_email@mail.com")
-    expect(response.body).toHaveProperty("created_at")
-    expect(response.body).toHaveProperty("updated_at")
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("name", "any name");
+    expect(response.body).toHaveProperty("email", "any_email@mail.com");
+    expect(response.body).toHaveProperty("created_at");
+    expect(response.body).toHaveProperty("updated_at");
+  });
+
+  it("Should not be able show user profile if not authenticate user", async () => {
+    const token = "invalid_token";
+    const response = await request(app)
+      .get("/api/v1/profile")
+      .send()
+      .set({ authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(401)
+    expect(response.body).toEqual({ message: "JWT invalid token!" });
   });
 });
