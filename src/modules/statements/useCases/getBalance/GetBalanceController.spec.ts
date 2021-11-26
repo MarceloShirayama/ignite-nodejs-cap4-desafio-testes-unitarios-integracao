@@ -72,4 +72,16 @@ describe("GetBalanceController", () => {
     expect(response.body).toHaveProperty("statement");
     expect(response.body).toHaveProperty("balance");
   });
+
+  it("Should not be able to get balance if user not authenticate", async () => {
+    token = "invalid_token";
+
+    const response = await request(app)
+      .get("/api/v1/statements/balance")
+      .send(user_id)
+      .set({ authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ message: "JWT invalid token!" });
+  });
 });
