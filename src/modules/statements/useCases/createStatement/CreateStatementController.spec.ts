@@ -71,4 +71,27 @@ describe("CreateStatementController.", () => {
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ message: "JWT invalid token!" });
   });
+
+  it("Should be able create withdraw statement", async () => {
+    const { token } = responseAuthenticate.body;
+
+    const withdraw = {
+      description: "withdraw in account",
+      amount: 100,
+    };
+
+    const response = await request(app)
+      .post("/api/v1/statements/withdraw")
+      .send(withdraw)
+      .set({ authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("user_id");
+    expect(response.body).toHaveProperty("description", "withdraw in account");
+    expect(response.body).toHaveProperty("amount", 100);
+    expect(response.body).toHaveProperty("type", "withdraw");
+    expect(response.body).toHaveProperty("created_at");
+    expect(response.body).toHaveProperty("updated_at");
+  });
 });
