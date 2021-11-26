@@ -94,4 +94,21 @@ describe("CreateStatementController.", () => {
     expect(response.body).toHaveProperty("created_at");
     expect(response.body).toHaveProperty("updated_at");
   });
+
+  it("Ensure CreateStatementController not be able create withdraw statement if not authenticate user", async () => {
+    const token = "invalid_token";
+
+    const withdraw = {
+      description: "withdraw in account",
+      amount: 100,
+    };
+
+    const response = await request(app)
+      .post("/api/v1/statements/withdraw")
+      .send(withdraw)
+      .set({ authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ message: "JWT invalid token!" });
+  });
 });
