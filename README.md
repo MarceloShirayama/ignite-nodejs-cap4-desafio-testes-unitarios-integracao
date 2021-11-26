@@ -1,5 +1,7 @@
 # Desafio 01 - Testes unitários
 # Desafio 02 - Testes de integração
+database para os testes de integração:
+- docker run --name ignite-nodejs-cap4-desafio-testes-integracao -e POSTGRES_DB=fin_api -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
 
 ## 💻 Sobre o desafio
 
