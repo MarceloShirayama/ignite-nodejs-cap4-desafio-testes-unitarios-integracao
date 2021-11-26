@@ -45,4 +45,15 @@ describe("AuthenticateUserController", () => {
     expect(response.status).toEqual(401)
     expect(response.body).toEqual({"message": "Incorrect email or password"})
   });
+
+
+
+  it("Should not be able authenticate an user with incorrect email", async () => {
+    const response = await request(app)
+      .post("/api/v1/sessions")
+      .send({ email: 'invalid_email', password });
+
+    expect(response.status).toEqual(401)
+    expect(response.body).toEqual({"message": "Incorrect email or password"})
+  });
 });
