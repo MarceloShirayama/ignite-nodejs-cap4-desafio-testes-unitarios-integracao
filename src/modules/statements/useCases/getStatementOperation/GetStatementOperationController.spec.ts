@@ -66,11 +66,27 @@ describe("GetStatementOperationController", () => {
       .send(user_id)
       .set({ authorization: `Bearer ${token}` });
 
-    expect(response.status).toBe(200)
-    expect(response.body).toHaveProperty('id', statement_id)
-    expect(response.body).toHaveProperty('user_id', user_id)
-    expect(response.body).toHaveProperty('description', deposit.description)
-    expect(response.body).toHaveProperty('amount', deposit.amount.toFixed(2).toString())
-    expect(response.body).toHaveProperty('type', "deposit")
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("id", statement_id);
+    expect(response.body).toHaveProperty("user_id", user_id);
+    expect(response.body).toHaveProperty("description", deposit.description);
+    expect(response.body).toHaveProperty(
+      "amount",
+      deposit.amount.toFixed(2).toString()
+    );
+    expect(response.body).toHaveProperty("type", "deposit");
+  });
+
+  it("Should not be able get statement operation if user not exists", async () => {
+    const statement_id = statement.body.id;
+    token = "invalid_token";
+
+    const response = await request(app)
+      .get(`/api/v1/statements/${statement_id}`)
+      .send(user_id)
+      .set({ authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ message: "JWT invalid token!" });
   });
 });
