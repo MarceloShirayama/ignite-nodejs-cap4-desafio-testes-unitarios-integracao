@@ -79,14 +79,27 @@ describe("GetStatementOperationController", () => {
 
   it("Should not be able get statement operation if user not exists", async () => {
     const statement_id = statement.body.id;
-    token = "invalid_token";
+    const invalid_token = "invalid_token";
 
     const response = await request(app)
       .get(`/api/v1/statements/${statement_id}`)
       .send(user_id)
-      .set({ authorization: `Bearer ${token}` });
+      .set({ authorization: `Bearer ${invalid_token}` });
 
     expect(response.status).toBe(401);
     expect(response.body).toEqual({ message: "JWT invalid token!" });
+  });
+
+  it("Should not be able get statement operation if statement operation not exists", async () => {
+    // const statement_id = statement.body.id;
+    const invalid_statement_id = "1adf4050-70d0-40d0-8fb9-81f287a57f75";
+
+    const response = await request(app)
+      .get(`/api/v1/statements/${invalid_statement_id}`)
+      .send(user_id)
+      .set({ authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ message: "Statement not found" });
   });
 });
