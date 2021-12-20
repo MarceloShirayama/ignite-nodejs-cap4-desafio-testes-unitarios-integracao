@@ -23,9 +23,13 @@ O template está disponível na seguinte URL:
 ---
 ## Banco de dados
 
-Se você quiser testar a aplicação usando o Insomnia para ver o funcionamento até mesmo como auxílio para criar os testes unitários, é importante que você confira os dados de autenticação do banco no arquivo `ormconfig.json` e, se necessário, altere.
+Crie um banco de dados com docker:
+```bash
+  docker run --name ignite-nodejs-cap4-desafio-testes-integracao -e POSTGRES_DB=fin_api -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
+```
+É importante que você configure os dados de autenticação do banco de dados de acordo com o arquivo .env e, se necessário, altere.
 
-Além disso você precisa criar uma database com o nome `fin_api` de acordo com o que está no arquivo de configurações do TypeORM.
+Além disso você precisa criar uma database com o nome `fin_api`.
 
 ---
 ## Rotas da aplicação
